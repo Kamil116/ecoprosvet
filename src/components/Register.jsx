@@ -1,7 +1,7 @@
 import React, {useState} from 'react';
 import {Button, TextField, Typography, Paper, Grid, Box, Link} from '@mui/material';
 import {useNavigate} from "react-router-dom";
-import {Bounce, toast, ToastContainer} from "react-toastify";
+import {Zoom, toast, ToastContainer} from "react-toastify";
 
 export default function Register() {
     const [email, setEmail] = useState('');
@@ -9,16 +9,28 @@ export default function Register() {
     const [confirmPassword, setConfirmPassword] = useState('');
 
     const navigate = useNavigate();
-    const handleSubmit = (e) => {
-        e.preventDefault();
-        showToastSucessMessage();
-        localStorage.setItem('loggedIn', 'true')
-        setTimeout(() => {
-            navigate('/');
-        }, 3500);
-    };
 
-    function showToastSucessMessage() {
+    function isValidEmail(email) {
+        const emailRegex = /\S+@\S+\.\S+/;
+        return emailRegex.test(email);
+
+    }
+
+    function showToastFailureMessage(errorText) {
+        toast.error(errorText, {
+            position: "top-center",
+            autoClose: 3000,
+            hideProgressBar: false,
+            closeOnClick: true,
+            pauseOnHover: true,
+            draggable: true,
+            progress: undefined,
+            theme: "light",
+            transition: Zoom,
+        });
+    }
+
+    function showToastSuccessMessage() {
         toast.success('Успешная регистрация', {
             position: "top-center",
             autoClose: 3000,
@@ -28,9 +40,35 @@ export default function Register() {
             draggable: true,
             progress: undefined,
             theme: "light",
-            transition: Bounce,
+            transition: Zoom,
         });
     }
+
+    const handleSubmit = (e) => {
+        e.preventDefault();
+        console.log('test')
+        if (!isValidEmail(email)) {
+            showToastFailureMessage('Некорректная почта');
+            setTimeout(() => {}, 3000)
+            return;
+        }
+        if (password.length < 8) {
+            showToastFailureMessage('Длина пароля должна быть минимум 8 символов');
+            return;
+        }
+        if (password !== confirmPassword) {
+            showToastFailureMessage('Пароли не совпадают')
+            return;
+        }
+
+        showToastSuccessMessage();
+
+        localStorage.setItem('loggedIn', 'true')
+        setTimeout(() => {
+            navigate('/');
+        }, 3500);
+    };
+
 
     return (
         <Grid container component="main" sx={{height: '100vh'}}>

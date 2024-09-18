@@ -1,7 +1,7 @@
 import React, {useState} from 'react';
 import {Button, TextField, Typography, Paper, Grid, Checkbox, FormControlLabel, Box, Link} from '@mui/material';
 import {useNavigate} from "react-router-dom";
-import {ToastContainer, toast, Bounce} from "react-toastify";
+import {ToastContainer, toast, Zoom} from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 
 export default function Login() {
@@ -20,7 +20,7 @@ export default function Login() {
             draggable: true,
             progress: undefined,
             theme: "light",
-            transition: Bounce,
+            transition: Zoom,
         });
     }
 
