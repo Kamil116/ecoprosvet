@@ -1,8 +1,18 @@
 import './Header.css'
+
 export default function Header() {
-    return <div className={'main'}>
-        <h3>Главная</h3>
-        <h3>Экоблог</h3>
-        <h3>Войти</h3>
-    </div>
+    return (
+        <header className="header">
+            <div className="header-logo">
+                <a href="/">Экопросвет</a>
+            </div>
+            <nav className="header-nav">
+                <a href='/'>Карта событий</a>
+                <a href='/blog'>Блог</a>
+            </nav>
+            <div className="header-auth">
+                <button className="auth-button">Войти</button>
+            </div>
+        </header>
+    );
 }

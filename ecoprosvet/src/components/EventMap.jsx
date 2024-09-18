@@ -1,7 +1,7 @@
 import React from 'react';
-import { ComposableMap, Geographies, Geography, Marker } from 'react-simple-maps';
-import { Grid, Paper, Typography, List, ListItem, ListItemText } from '@mui/material';
-import { useNavigate } from "react-router-dom";
+import {ComposableMap, Geographies, Geography, Marker} from 'react-simple-maps';
+import {Grid, Paper, Typography, List, ListItem, ListItemText} from '@mui/material';
+import {useNavigate} from "react-router-dom";
 
 import './EventMap.css';
 
@@ -36,74 +36,83 @@ export default function EventMap() {
     };
 
     return (
-        <Grid container spacing={2} style={{ height: '100vh', padding: '20px' }}>
-            <Grid item xs={12} md={4}>
-                <Paper elevation={3} style={{ padding: '20px', height: '100%', overflowY: 'auto' }}>
-                    <Typography variant="h4" gutterBottom style={{ textAlign: 'center' }}>
-                        ЭКОМЕРОПРИЯТИЯ МОСКВЫ
-                    </Typography>
-                    <List>
-                        {events.map((event) => (
-                            <ListItem
-                                key={event.id}
-                                button
-                                onClick={() => handleEventClick(event)}
-                                style={{ marginBottom: '10px', borderRadius: '10px', cursor: 'pointer' }}
-                            >
-                                <ListItemText
-                                    primary={event.title}
-                                    secondary={`${event.date} - ${event.location}`}
-                                />
-                            </ListItem>
-                        ))}
-                    </List>
-                </Paper>
-            </Grid>
-
-            {/* Right section: Map */}
-            <Grid item xs={12} md={8}>
-                <Paper elevation={3} style={{ padding: '20px', height: '100%', overflow: 'hidden' }}>
-                    <Typography variant="h4" gutterBottom style={{ textAlign: 'center' }}>
-                        КАРТА СОБЫТИЙ
-                    </Typography>
-                    <ComposableMap
-                        projection="geoMercator"
-                        projectionConfig={{
-                            scale: 30000,
-                            center: [37.62, 55.75],
-                        }}
-                        style={{ width: '100%', height: '100%' }}
-                    >
-                        <Geographies geography={geoUrl}>
-                            {(geographies) =>
-                                geographies.geographies.map((geo) => (
-                                    <Geography
-                                        key={geo.rsmKey}
-                                        geography={geo}
-                                        fill="#EAEAEC"
-                                        stroke="#D6D6DA"
-                                        style={{
-                                            hover: {
-                                                fill: '#FF331F',
-                                            }
-                                        }}
+        <div className="event-map">
+            <Grid container spacing={2} style={{height: '100vh', padding: '20px'}}>
+                <Grid item xs={12} md={4}>
+                    <Paper elevation={3} style={{padding: '20px', height: '100%', overflowY: 'auto'}}>
+                        <Typography variant="h4" gutterBottom style={{textAlign: 'center'}}>
+                            ЭКОМЕРОПРИЯТИЯ МОСКВЫ
+                        </Typography>
+                        <List>
+                            {events.map((event) => (
+                                <ListItem
+                                    key={event.id}
+                                    button
+                                    onClick={() => handleEventClick(event)}
+                                    style={{marginBottom: '10px', borderRadius: '10px', cursor: 'pointer'}}
+                                >
+                                    <ListItemText
+                                        primary={event.title}
+                                        secondary={`${event.date} - ${event.location}`}
                                     />
-                                ))
-                            }
-                        </Geographies>
+                                </ListItem>
+                            ))}
+                        </List>
+                    </Paper>
+                </Grid>
 
-                        {events.map((event) => (
-                            <Marker
-                                key={event.id}
-                                coordinates={event.coordinates}
-                                onClick={() => handleMarkerClick(event)}
-                            >
-                                <circle r={6} fill="red" stroke="gray" strokeWidth={2} />
-                            </Marker>
-                        ))}
-                    </ComposableMap>
-                </Paper>
+                {/* Right section: Map */}
+                <Grid item xs={12} md={8}>
+                    <Paper elevation={3} style={{padding: '20px', height: '100%', overflow: 'hidden'}}>
+                        <Typography variant="h4" gutterBottom style={{textAlign: 'center'}}>
+                            КАРТА СОБЫТИЙ
+                        </Typography>
+                        <ComposableMap
+                            projection="geoMercator"
+                            projectionConfig={{
+                                scale: 30000,
+                                center: [37.62, 55.75],
+                            }}
+                            style={{width: '100%', height: '100%'}}
+                        >
+                            <Geographies geography={geoUrl}>
+                                {(geographies) =>
+                                    geographies.geographies.map((geo) => (
+                                        <Geography
+                                            key={geo.rsmKey}
+                                            geography={geo}
+                                            fill="#EAEAEC"
+                                            stroke="#D6D6DA"
+                                            style={{
+                                                hover: {
+                                                    fill: '#FF331F',
+                                                }
+                                            }}
+                                        />
+                                    ))
+                                }
+                            </Geographies>
+
+                            {events.map((event) => (
+                                <Marker
+                                    key={event.id}
+                                    coordinates={event.coordinates}
+                                    onClick={() => handleMarkerClick(event)}
+                                >
+                                    <circle r={6} fill="red" stroke="gray" strokeWidth={2}/>
+                                    <text
+                                        textAnchor="middle"
+                                        y={-10}
+                                        style={{fontSize: '12px', fill: '#5D5A6D'}}
+                                    >
+                                        {event.title}
+                                    </text>
+                                </Marker>
+                            ))}
+                        </ComposableMap>
+                    </Paper>
+                </Grid>
             </Grid>
-        </Grid>
+        </div>
     );
 }

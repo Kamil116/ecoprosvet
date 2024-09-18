@@ -1,15 +1,11 @@
 import Header from "./Header";
 import EventMap from "./EventMap";
-import MapChart from "./TestMap";
-
-function Footer() {
-    return null;
-}
+import Footer from "./Footer";
 
 export default function MainPage() {
     return <div>
-        <Header />
-        <EventMap />
-        <Footer />
+        <Header/>
+        <EventMap/>
+        <Footer/>
     </div>
 }

@@ -1,3 +1,4 @@
 .event-map {
-    background-color: lightgray;
+    /*background-color: lightgray;*/
+    overflow: hidden;
 }
