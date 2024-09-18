@@ -1,18 +1,23 @@
-import React, {Component} from "react";
+import React from "react";
+import {Button, Dialog, DialogActions, DialogContent, DialogTitle, Typography} from "@mui/material";
 
-export default class PopUp extends Component {
-    handleClick = () => {
-        this.props.toggle();
-    };
-
-    render() {
-        return (
-            <div className="modal">
-                <div className="modal_content">
-                    <span className="close" onClick={this.handleClick}>&times;    </span>
-                    <p>I'm A Pop Up!!!</p>
-                </div>
-            </div>
-        );
-    }
+export default function EventDetails(props) {
+    return (
+        <Dialog open={props.open} onClose={props.onClose}>
+            <DialogTitle>{props.selectedEvent?.title}</DialogTitle>
+            <DialogContent>
+                <Typography variant="h6">{props.selectedEvent?.location}</Typography>
+                <Typography variant="body1">{props.selectedEvent?.date}</Typography>
+                <Typography variant="body2" paragraph>{props.selectedEvent?.description}</Typography>
+            </DialogContent>
+            <DialogActions>
+                <Button onClick={props.onClose} color="primary">
+                    Отмена
+                </Button>
+                <Button onClick={props.handleConfirm} color="primary">
+                    Присоединиться
+                </Button>
+            </DialogActions>
+        </Dialog>
+    );
 }

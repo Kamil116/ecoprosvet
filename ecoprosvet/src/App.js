@@ -1,17 +1,21 @@
 import './App.css';
 import MainPage from "./components/MainPage";
-import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
+import {BrowserRouter as Router, Route, Routes} from 'react-router-dom';
+import Login from "./components/Login";
+import Register from "./components/Register";
 
 function App() {
-  return (
-    <Router>
-      <div className="App">
-        <Routes>
-          <Route path="/" element={<MainPage />} />
-        </Routes>
-      </div>
-    </Router>
-  );
+    return (
+        <Router>
+            <div className="App">
+                <Routes>
+                    <Route path="/" element={<MainPage/>}/>
+                    <Route path="/login" element={<Login/>}/>
+                    <Route path="/register" element={<Register/>}/>
+                </Routes>
+            </div>
+        </Router>
+    );
 }
 
 export default App;

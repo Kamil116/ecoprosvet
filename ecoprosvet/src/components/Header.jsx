@@ -1,6 +1,26 @@
 import './Header.css'
+import {useNavigate} from "react-router-dom";
+import {useEffect, useState} from "react";
 
 export default function Header() {
+    let navigate = useNavigate();
+    const [isLoggedIn, setIsLoggedIn] = useState(false);
+
+    function handleLogout() {
+        localStorage.removeItem('loggedIn');
+        setIsLoggedIn(false);
+        window.location.reload();
+    }
+
+    useEffect(() => {
+        // Check if user is logged in by checking localStorage
+        const user = localStorage.getItem('loggedIn');
+        if (user) {
+            setIsLoggedIn(true);
+        }
+        console.log(user)
+    }, []);
+
     return (
         <header className="header">
             <div className="header-logo">
@@ -11,7 +31,12 @@ export default function Header() {
                 <a href='/blog'>Блог</a>
             </nav>
             <div className="header-auth">
-                <button className="auth-button">Войти</button>
+                {isLoggedIn ? (
+                    <button className="auth-button" onClick={handleLogout}>Выйти</button>
+                ) : (
+                    <button className="auth-button" onClick={() => navigate('/login')}>Войти</button>
+                )}
+
             </div>
         </header>
     );

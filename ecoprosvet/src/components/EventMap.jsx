@@ -1,38 +1,106 @@
-import React from 'react';
+import React, {useState} from 'react';
 import {ComposableMap, Geographies, Geography, Marker} from 'react-simple-maps';
-import {Grid, Paper, Typography, List, ListItem, ListItemText} from '@mui/material';
-import {useNavigate} from "react-router-dom";
-
+import {
+    Grid,
+    Paper,
+    Typography,
+    List,
+    ListItem,
+    ListItemText,
+} from '@mui/material';
+import {useNavigate} from 'react-router-dom';
 import './EventMap.css';
+import EventDetails from "./EventDetails";
 
-const events = [
+const initialEvents = [
     {
         id: 1,
-        title: 'Событие 1',
+        title: 'Лекция',
         date: '2024-10-01',
         location: 'Парк Горького, Москва',
         coordinates: [37.6017, 55.7158],
+        description: 'Познавательная лекция о природе.',
+        checkedIn: false,
     },
     {
         id: 2,
-        title: 'Событие 2',
+        title: 'Субботник',
         date: '2024-10-05',
         location: 'Московский государственный университет',
         coordinates: [37.5408, 55.7033],
+        description: 'Участие в субботнике для очистки территории.',
+        checkedIn: false,
     },
+    {
+        id: 3,
+        title: 'квест «Вокруг света с Речкиным»',
+        date: '2024-09-21',
+        location: 'ВДНХ, Москва',
+        coordinates: [37.618525, 55.832940],
+        description: 'Увлекательный квест по достопримечательностям.',
+        checkedIn: false,
+
+    },
+    {
+        id: 4,
+        title: 'ЛЕКЦИЯ «Его высочество – жираф!»',
+        date: '2024-10-05',
+        location: 'Дарвиновский музей, Москва',
+        coordinates: [37.561526, 55.690643],
+        description: 'Интересная лекция о жирафах.',
+        checkedIn: false,
+    },
+    {
+        id: 5,
+        title: 'Обзорная экскурсия в "Лесной сказке"',
+        date: '2024-09-21',
+        location: "Москва экоцентр «Лесная сказка»",
+        coordinates: [37.547459, 55.585118],
+        description: 'Экскурсия по экотропам.',
+        checkedIn: false,
+    },
+    {
+        id: 6,
+        title: 'Тематическое занятие "День леса"',
+        date: '2024-09-22',
+        location: 'Москва экоцентр «Лесная сказка»',
+        coordinates: [37.547459, 55.585118],
+        description: 'Тематическое занятие по лесным экосистемам.',
+        checkedIn: false,
+    }
 ];
 
 const geoUrl = 'https://raw.githubusercontent.com/zarkzork/russia-topojson/master/moscow.json';
 
 export default function EventMap() {
-    let navigate = useNavigate();
+
+    const [events, setEvents] = useState(initialEvents);
+    const [open, setOpen] = useState(false);
+    const [selectedEvent, setSelectedEvent] = useState(null);
+
     const handleMarkerClick = (event) => {
-        console.log("clicked:", event);
+        setSelectedEvent(event);
+        setOpen(true);
     };
 
     const handleEventClick = (event) => {
-        navigate(`/event_details/${event.id}`);
-        console.log("clicked:", event);
+        setOpen(true);
+        setSelectedEvent(event);
+    };
+
+    const handleClose = () => {
+        setOpen(false);
+        setSelectedEvent(null);
+        console.log('Rejected :(')
+    };
+
+    const handleConfirm = () => {
+        if (selectedEvent) {
+            setEvents(events.map(event =>
+                event.id === selectedEvent.id ? {...event, checkedIn: true} : event
+            ));
+        }
+        handleClose();
     };
 
     return (
@@ -49,7 +117,10 @@ export default function EventMap() {
                                     key={event.id}
                                     button
                                     onClick={() => handleEventClick(event)}
-                                    style={{marginBottom: '10px', borderRadius: '10px', cursor: 'pointer'}}
+                                    style={{
+                                        marginBottom: '10px', borderRadius: '10px', cursor: 'pointer',
+                                        backgroundColor: event.checkedIn ? 'lightgreen' : 'inherit'
+                                    }}
                                 >
                                     <ListItemText
                                         primary={event.title}
@@ -99,7 +170,8 @@ export default function EventMap() {
                                     coordinates={event.coordinates}
                                     onClick={() => handleMarkerClick(event)}
                                 >
-                                    <circle r={6} fill="red" stroke="gray" strokeWidth={2}/>
+                                    <circle r={6} fill={event.checkedIn ? 'green' : 'red'} stroke="gray"
+                                            strokeWidth={2}/>
                                     <text
                                         textAnchor="middle"
                                         y={-10}
@@ -113,6 +185,9 @@ export default function EventMap() {
                     </Paper>
                 </Grid>
             </Grid>
+
+            <EventDetails open={open} onClose={handleClose} selectedEvent={selectedEvent}
+                          handleConfirm={handleConfirm}/>
         </div>
     );
 }
