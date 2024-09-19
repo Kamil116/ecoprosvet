@@ -35,7 +35,6 @@ export default function Header() {
                 ) : (
                     <button className="auth-button" onClick={() => navigate('/login')}>Войти</button>
                 )}
-
             </div>
         </header>
     );
