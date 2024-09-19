@@ -1,27 +1,54 @@
 import React, {useState} from 'react';
 import {TextField, Button, Container, Typography, Box, FormControl, InputLabel, Select, MenuItem} from '@mui/material';
 import AdminPanel from "./AdminPanel";
+import {addDoc, collection} from "firebase/firestore";
+import {db} from "../../firebaseConfig";
 
 export default function AddEvent() {
     const [eventName, setEventName] = useState('');
     const [eventDate, setEventDate] = useState('');
-    const [eventType, setEventType] = React.useState('');
+    const [eventType, setEventType] = useState('');
+    const [location, setLocation] = useState('');
+    const [description, setDescription] = useState('');
+    const [coordinates, setCoordinates] = useState({ lat: '', lng: '' });
 
     const handleSubmit = (e) => {
         e.preventDefault();
-        console.log("Event created:", eventName, eventDate, eventType);
+
+        const eventId = Date.now(); // Timestamp = uniq ID
+
+        const eventData = {
+            id: eventId,
+            title: eventName,
+            date: eventDate,
+            location: location,
+            coordinates: [parseFloat(coordinates.lng), parseFloat(coordinates.lat)],
+            description: description,
+            eventType: eventType,
+        };
+
+        addEventToApproval(eventData);
+
         setEventName('');
         setEventDate('');
+        setEventType('');
+        setLocation('');
+        setDescription('');
+        setCoordinates({ lat: '', lng: '' });
     };
 
-    function addEventToStorage(data) {
-
+    async function addEventToApproval(eventData) {
+        try {
+            const docRef = await addDoc(collection(db, 'approval'), eventData);
+            console.log("Document written with ID: ", docRef);
+        } catch (e) {
+            console.error("Error adding document: ", e);
+        }
     }
 
 
     const handleChange = (event) => {
-        // setAge(event.target.value);
-        console.log(event.target);
+        setEventType(event.target.value)
     };
 
 
@@ -50,6 +77,30 @@ export default function AddEvent() {
                         onChange={(e) => setEventDate(e.target.value)}
                         required
                     />
+                    <TextField
+                        label="Место проведения"
+                        value={location}
+                        onChange={(e) => setLocation(e.target.value)}
+                        required
+                    />
+                    <TextField
+                        label="Широта"
+                        value={coordinates.lat}
+                        onChange={(e) => setCoordinates({ ...coordinates, lat: e.target.value })}
+                        required
+                    />
+                    <TextField
+                        label="Долгота"
+                        value={coordinates.lng}
+                        onChange={(e) => setCoordinates({ ...coordinates, lng: e.target.value })}
+                        required
+                    />
+                    <TextField
+                        label="Описание"
+                        value={description}
+                        onChange={(e) => setDescription(e.target.value)}
+                        required
+                    />
                     <FormControl fullWidth required>
                         <InputLabel id="event-type-select-label">Тип события</InputLabel>
                         <Select
@@ -59,9 +110,9 @@ export default function AddEvent() {
                             label="Тип события"
                             onChange={handleChange}
                         >
-                            <MenuItem value="eco-lecture">Eco Lecture</MenuItem>
-                            <MenuItem value="forest-digging">Forest Digging</MenuItem>
-                            <MenuItem value="cleanup">Cleanup</MenuItem>
+                            <MenuItem value="lecture">Лекция</MenuItem>
+                            <MenuItem value="cleaning_day">Субботник</MenuItem>
+                            <MenuItem value="other">Другое</MenuItem>
                         </Select>
                     </FormControl>
                     <Button type="submit" variant="contained" color="primary">

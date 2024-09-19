@@ -1,0 +1,161 @@
+/* Общий контейнер для страницы блога */
+.Blog {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 20px;
+  font-family: Arial, sans-serif;
+  background-color: #f9f9f9;
+}
+
+/* Заголовок страницы */
+.Blog h1 {
+  text-align: center;
+  font-size: 32px;
+  font-family: Arial, sans-serif;
+  color: #333;
+  margin-bottom: 40px;
+}
+
+
+.back-button {
+  padding: 10px 20px;
+  border: none;
+  border-radius: 5px;
+  background-color: #007bff; /* Цвет фона кнопки */
+  color: white; /* Цвет текста кнопки */
+  font-size: 16px;
+  cursor: pointer;
+  margin-bottom: 20px;
+  transition: background-color 0.3s, transform 0.2s;
+}
+
+.back-button:hover {
+  background-color: #0056b3; /* Цвет фона кнопки при наведении */
+}
+
+.back-button:active {
+  transform: scale(0.98); /* Эффект уменьшения при нажатии */
+}
+
+
+/* Теги для фильтрации статей */
+.top {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 40px;
+}
+
+.tags {
+  display: flex;
+  gap: 20px;
+  padding: 0;
+  list-style: none;
+}
+
+.tags li {
+  cursor: pointer;
+  padding: 10px 15px;
+  border: 1px solid #E5E5E5;
+  border-radius: 4px;
+  transition: background-color 0.3s ease;
+  color: black;
+}
+
+.tags li.active {
+  background-color: black;
+  color: white;
+}
+
+.tags li:hover {
+  background-color: #E5E5E5;
+}
+
+.search-input {
+  padding: 10px;
+  border: 1px solid #E5E5E5;
+  border-radius: 10px;
+  width: 260px;
+  height: 30px;
+}
+
+/* Контейнер для статей */
+.content {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 20px;
+  justify-content: space-between;
+}
+
+/* Стиль для каждой отдельной статьи */
+.article {
+  background-color: white;
+  border: 1px solid #E5E5E5;
+  border-radius: 8px;
+  padding: 20px;
+  width: calc(33.333% - 20px); /* 3 статьи в строке */
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+  transition: transform 0.3s ease;
+}
+
+.article:hover {
+  transform: translateY(-5px); /* Эффект при наведении */
+}
+
+.article__image {
+  width: 100%;
+  height: 200px;
+  object-fit: cover;
+  border-radius: 4px;
+  margin-bottom: 15px;
+}
+
+.article h4 {
+  font-size: 20px;
+  color: black;
+  margin-bottom: 10px;
+  cursor: pointer;
+}
+
+.article h4:hover {
+  color: red;
+}
+
+.article p {
+  font-size: 14px;
+  color: #555;
+  line-height: 1.6;
+}
+
+.article__author {
+  font-size: 12px;
+  color: #777;
+  margin-top: 10px;
+}
+
+/* Пагинация */
+.pagination {
+  display: flex;
+  justify-content: center;
+  margin-top: 40px;
+  gap: 10px;
+}
+
+.pagination li {
+  list-style: none;
+  padding: 10px 15px;
+  border: 1px solid #E5E5E5;
+  border-radius: 4px;
+  cursor: pointer;
+  background-color: white;
+  color: black;
+  transition: background-color 0.3s ease;
+}
+
+.pagination li.active {
+  background-color: black;
+  color: white;
+}
+
+.pagination li:hover {
+  background-color: #E5E5E5;
+}
