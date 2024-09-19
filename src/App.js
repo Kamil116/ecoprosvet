@@ -6,6 +6,7 @@ import Register from "./components/Register";
 import AddEvent from "./components/AdminPanel/AddEvent";
 import ManageEvents from "./components/AdminPanel/ManageEvents";
 import Blog from "./components/Blog";
+import SuperAdminPage from "./components/SuperAdmin/SuperAdmin";
 
 function App() {
     return (
@@ -18,6 +19,7 @@ function App() {
                     <Route path="/blog" element={<Blog/>}/>
                     <Route path="/add_event" element={<AddEvent/>}/>
                     <Route path="/manage" element={<ManageEvents/>}/>
+                    <Route path="/check" element={<SuperAdminPage/>}/>
                 </Routes>
             </div>
         </Router>

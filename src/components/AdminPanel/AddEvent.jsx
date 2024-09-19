@@ -10,32 +10,43 @@ export default function AddEvent() {
     const [eventType, setEventType] = useState('');
     const [location, setLocation] = useState('');
     const [description, setDescription] = useState('');
-    const [coordinates, setCoordinates] = useState({ lat: '', lng: '' });
+    const [coordinates, setCoordinates] = useState({lat: '', lng: ''});
+    const [imageUrl, setImageUrl] = useState('');
 
-    const handleSubmit = (e) => {
+    const handleSubmit = async (e) => {
         e.preventDefault();
 
-        const eventId = Date.now(); // Timestamp = uniq ID
+        const eventId = Date.now(); // Timestamp = unique ID
 
-        const eventData = {
-            id: eventId,
-            title: eventName,
-            date: eventDate,
-            location: location,
-            coordinates: [parseFloat(coordinates.lng), parseFloat(coordinates.lat)],
-            description: description,
-            eventType: eventType,
-        };
+        let imageUrl = '';
 
-        addEventToApproval(eventData);
+        try {
+            const eventData = {
+                id: eventId,
+                title: eventName,
+                date: eventDate,
+                location: location,
+                coordinates: [parseFloat(coordinates.lng), parseFloat(coordinates.lat)],
+                description: description,
+                eventType: eventType,
+                imageUrl: imageUrl
+            };
 
-        setEventName('');
-        setEventDate('');
-        setEventType('');
-        setLocation('');
-        setDescription('');
-        setCoordinates({ lat: '', lng: '' });
+            await addEventToApproval(eventData);
+
+            setEventName('');
+            setEventDate('');
+            setEventType('');
+            setLocation('');
+            setDescription('');
+            setCoordinates({lat: '', lng: ''});
+            setImageUrl('');
+
+        } catch (error) {
+            console.error("Error adding event: ", error);
+        }
     };
+
 
     async function addEventToApproval(eventData) {
         try {
@@ -86,19 +97,25 @@ export default function AddEvent() {
                     <TextField
                         label="Широта"
                         value={coordinates.lat}
-                        onChange={(e) => setCoordinates({ ...coordinates, lat: e.target.value })}
+                        onChange={(e) => setCoordinates({...coordinates, lat: e.target.value})}
                         required
                     />
                     <TextField
                         label="Долгота"
                         value={coordinates.lng}
-                        onChange={(e) => setCoordinates({ ...coordinates, lng: e.target.value })}
+                        onChange={(e) => setCoordinates({...coordinates, lng: e.target.value})}
                         required
                     />
                     <TextField
                         label="Описание"
                         value={description}
                         onChange={(e) => setDescription(e.target.value)}
+                        required
+                    />
+                    <TextField
+                        label="Ссылка на изображение"
+                        value={imageUrl}
+                        onChange={(e) => setImageUrl(e.target.value)}
                         required
                     />
                     <FormControl fullWidth required>
@@ -115,9 +132,7 @@ export default function AddEvent() {
                             <MenuItem value="other">Другое</MenuItem>
                         </Select>
                     </FormControl>
-                    <Button type="submit" variant="contained" color="primary">
-                        Create Event
-                    </Button>
+                    <Button type="submit" variant="contained" color="primary">Создать событие</Button>
                 </Box>
             </Container>
         </>

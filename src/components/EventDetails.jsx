@@ -1,8 +1,8 @@
 import React from "react";
-import { Button, Dialog, DialogActions, DialogContent, DialogTitle, Typography, Chip } from "@mui/material";
+import {Button, Dialog, DialogActions, DialogContent, DialogTitle, Typography, Chip} from "@mui/material";
 
 export default function EventDetails(props) {
-    const { selectedEvent, open, onClose, handleConfirm, handleCancel } = props;
+    const {selectedEvent, open, onClose, handleConfirm, handleCancel} = props;
 
     return (
         <Dialog open={open} onClose={onClose} fullWidth maxWidth="sm">
@@ -22,11 +22,18 @@ export default function EventDetails(props) {
                     label={selectedEvent?.type || "Тип не указан"}
                     color="primary"
                     variant="outlined"
-                    style={{ margin: '10px 0' }}
+                    style={{margin: '10px 0'}}
                 />
                 <Typography variant="body2" paragraph>
                     {selectedEvent?.description}
                 </Typography>
+                {selectedEvent?.imageUrl && (
+                    <img
+                        src={selectedEvent.imageUrl}
+                        alt={selectedEvent.title}
+                        style={{width: '100%', height: 'auto', marginTop: '20px', borderRadius: '10px'}}
+                    />
+                )}
             </DialogContent>
             <DialogActions>
                 {!selectedEvent?.checkedIn ? (
