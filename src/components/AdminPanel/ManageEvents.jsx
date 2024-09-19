@@ -40,15 +40,15 @@ export default function ManageEvents() {
             <AdminPanel/>
             <Container maxWidth="lg">
                 <Typography variant="h4" gutterBottom>
-                    Manage Events
+                    Управление
                 </Typography>
                 <TableContainer component={Paper}>
                     <Table>
                         <TableHead>
                             <TableRow>
-                                <TableCell>Event Name</TableCell>
-                                <TableCell>Event Date</TableCell>
-                                <TableCell>Actions</TableCell>
+                                <TableCell>Название</TableCell>
+                                <TableCell>Дата</TableCell>
+                                <TableCell>Действия</TableCell>
                             </TableRow>
                         </TableHead>
                         <TableBody>
