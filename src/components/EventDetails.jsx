@@ -1,21 +1,45 @@
 import React from "react";
-import {Button, Dialog, DialogActions, DialogContent, DialogTitle, Typography} from "@mui/material";
+import { Button, Dialog, DialogActions, DialogContent, DialogTitle, Typography, Chip } from "@mui/material";
 
 export default function EventDetails(props) {
+    const { selectedEvent, open, onClose, handleConfirm, handleCancel } = props;
+
     return (
-        <Dialog open={props.open} onClose={props.onClose}>
-            <DialogTitle>{props.selectedEvent?.title}</DialogTitle>
+        <Dialog open={open} onClose={onClose} fullWidth maxWidth="sm">
+            <DialogTitle>
+                <Typography variant="h5" component="div">
+                    {selectedEvent?.title}
+                </Typography>
+            </DialogTitle>
             <DialogContent>
-                <Typography variant="h6">{props.selectedEvent?.location}</Typography>
-                <Typography variant="body1">{props.selectedEvent?.date}</Typography>
-                <Typography variant="body2" paragraph>{props.selectedEvent?.description}</Typography>
+                <Typography variant="h6" gutterBottom>
+                    {selectedEvent?.location}
+                </Typography>
+                <Typography variant="body1" color="textSecondary">
+                    {selectedEvent?.date}
+                </Typography>
+                <Chip
+                    label={selectedEvent?.type || "Тип не указан"}
+                    color="primary"
+                    variant="outlined"
+                    style={{ margin: '10px 0' }}
+                />
+                <Typography variant="body2" paragraph>
+                    {selectedEvent?.description}
+                </Typography>
             </DialogContent>
             <DialogActions>
-                <Button onClick={props.onClose} color="primary">
-                    Отмена
-                </Button>
-                <Button onClick={props.handleConfirm} color="primary">
-                    Присоединиться
+                {!selectedEvent?.checkedIn ? (
+                    <Button onClick={handleConfirm} color="success" variant="contained">
+                        Присоединиться
+                    </Button>
+                ) : (
+                    <Button onClick={handleCancel} color="error" variant="contained">
+                        Отменить участие
+                    </Button>
+                )}
+                <Button onClick={onClose} color="secondary" variant="outlined">
+                    Закрыть
                 </Button>
             </DialogActions>
         </Dialog>

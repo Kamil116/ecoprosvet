@@ -76,13 +76,6 @@ export default function Register() {
                 item
                 xs={12}
                 md={6}
-                sx={{
-                    backgroundImage: 'url(https://source.unsplash.com/random)',
-                    backgroundRepeat: 'no-repeat',
-                    backgroundColor: (t) => t.palette.grey[50],
-                    backgroundSize: 'cover',
-                    backgroundPosition: 'center',
-                }}
             >
                 <h1>Доступ к экологической жизни Москвы</h1>
                 <p>Департамент природопользования и охраны окружающей среды города Москвы</p>

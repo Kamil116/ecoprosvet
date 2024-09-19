@@ -10,7 +10,7 @@ export default function Login() {
 
     let navigate = useNavigate();
 
-    function showToastSucessMessage() {
+    function showToastSuccessMessage() {
         toast.success('Вход выполнен', {
             position: "top-center",
             autoClose: 3000,
@@ -26,10 +26,9 @@ export default function Login() {
 
     const handleSubmit = (e) => {
         e.preventDefault();
-        console.log('logged in')
         localStorage.setItem('loggedIn', 'true');
 
-        showToastSucessMessage()
+        showToastSuccessMessage()
 
         setTimeout(() => {
             navigate('/');

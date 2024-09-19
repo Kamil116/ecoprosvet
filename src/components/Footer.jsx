@@ -9,7 +9,7 @@ export default function Footer() {
                 <p>Следите за нами:</p>
                 <a href="https://vk.com" target="_blank" rel="noopener noreferrer">ВКонтакте </a>
                 <a href="https://telegram.com" target="_blank" rel="noopener noreferrer">Telegram</a>
-                <p>© 2024 Экопросвет. Все права защищены.</p>
+                <p>© 2024 Экопросвет.</p>
             </div>
         </footer>
 

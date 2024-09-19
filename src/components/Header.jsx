@@ -13,7 +13,6 @@ export default function Header() {
     }
 
     useEffect(() => {
-        // Check if user is logged in by checking localStorage
         const user = localStorage.getItem('loggedIn');
         if (user) {
             setIsLoggedIn(true);

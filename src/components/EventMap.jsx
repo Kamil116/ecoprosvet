@@ -1,82 +1,55 @@
-import React, {useState} from 'react';
+import React, {useEffect, useState} from 'react';
 import {ComposableMap, Geographies, Geography, Marker} from 'react-simple-maps';
-import {
-    Grid,
-    Paper,
-    Typography,
-    List,
-    ListItem,
-    ListItemText,
-} from '@mui/material';
-import {useNavigate} from 'react-router-dom';
+import {Grid, Paper, Typography, List, ListItem, ListItemText} from '@mui/material';
+import EventDetails from './EventDetails';
+import {db} from '../firebaseConfig';
+import {collection, getDocs, doc, updateDoc, query, where} from 'firebase/firestore';
 import './EventMap.css';
-import EventDetails from "./EventDetails";
-
-const initialEvents = [
-    {
-        id: 1,
-        title: 'Лекция',
-        date: '2024-10-01',
-        location: 'Парк Горького, Москва',
-        coordinates: [37.6017, 55.7158],
-        description: 'Познавательная лекция о природе.',
-        checkedIn: false,
-    },
-    {
-        id: 2,
-        title: 'Субботник',
-        date: '2024-10-05',
-        location: 'Московский государственный университет',
-        coordinates: [37.5408, 55.7033],
-        description: 'Участие в субботнике для очистки территории.',
-        checkedIn: false,
-    },
-    {
-        id: 3,
-        title: 'квест «Вокруг света с Речкиным»',
-        date: '2024-09-21',
-        location: 'ВДНХ, Москва',
-        coordinates: [37.618525, 55.832940],
-        description: 'Увлекательный квест по достопримечательностям.',
-        checkedIn: false,
-
-    },
-    {
-        id: 4,
-        title: 'ЛЕКЦИЯ «Его высочество – жираф!»',
-        date: '2024-10-05',
-        location: 'Дарвиновский музей, Москва',
-        coordinates: [37.561526, 55.690643],
-        description: 'Интересная лекция о жирафах.',
-        checkedIn: false,
-    },
-    {
-        id: 5,
-        title: 'Обзорная экскурсия в "Лесной сказке"',
-        date: '2024-09-21',
-        location: "Москва экоцентр «Лесная сказка»",
-        coordinates: [37.547459, 55.585118],
-        description: 'Экскурсия по экотропам.',
-        checkedIn: false,
-    },
-    {
-        id: 6,
-        title: 'Тематическое занятие "День леса"',
-        date: '2024-09-22',
-        location: 'Москва экоцентр «Лесная сказка»',
-        coordinates: [37.547459, 55.585118],
-        description: 'Тематическое занятие по лесным экосистемам.',
-        checkedIn: false,
-    }
-];
 
 const geoUrl = 'https://raw.githubusercontent.com/zarkzork/russia-topojson/master/moscow.json';
 
 export default function EventMap() {
-
-    const [events, setEvents] = useState(initialEvents);
+    const [events, setEvents] = useState([]); // Use imported data
     const [open, setOpen] = useState(false);
     const [selectedEvent, setSelectedEvent] = useState(null);
+
+    useEffect(() => {
+        const fetchEvents = async () => {
+            const eventsCollectionRef = collection(db, "events");
+            const querySnapshot = await getDocs(eventsCollectionRef);
+            const eventsData = querySnapshot.docs.map(doc => doc.data());
+            setEvents(eventsData);
+        };
+
+        fetchEvents();
+    }, []);
+
+    const updateCheckedInStatus = async (eventId, checkedInStatus) => {
+    try {
+        const eventsRef = collection(db, "events");
+        const q = query(eventsRef, where("id", "==", eventId));
+        const querySnapshot = await getDocs(q);
+
+        if (!querySnapshot.empty) {
+            const eventDoc = querySnapshot.docs[0];
+            const eventDocRef = eventDoc.ref;
+
+            // Update the checkedIn status
+            await updateDoc(eventDocRef, { checkedIn: checkedInStatus });
+
+            setEvents(prevEvents =>
+                prevEvents.map(event =>
+                    event.id === eventId ? { ...event, checkedIn: checkedInStatus } : event
+                )
+            );
+            console.log("Всё хорошо");
+        } else {
+            console.error("Всё плохо");
+        }
+    } catch (error) {
+        console.error("Всё очень плохо, и вот почему: ", error);
+    }
+};
 
     const handleMarkerClick = (event) => {
         setSelectedEvent(event);
@@ -91,14 +64,19 @@ export default function EventMap() {
     const handleClose = () => {
         setOpen(false);
         setSelectedEvent(null);
-        console.log('Rejected :(')
     };
 
     const handleConfirm = () => {
         if (selectedEvent) {
-            setEvents(events.map(event =>
-                event.id === selectedEvent.id ? {...event, checkedIn: true} : event
-            ));
+            updateCheckedInStatus(selectedEvent.id, true);
+        }
+        console.log(selectedEvent)
+        handleClose();
+    };
+
+    const handleCancel = () => {
+        if (selectedEvent) {
+            updateCheckedInStatus(selectedEvent.id, false);
         }
         handleClose();
     };
@@ -118,8 +96,11 @@ export default function EventMap() {
                                     button
                                     onClick={() => handleEventClick(event)}
                                     style={{
-                                        marginBottom: '10px', borderRadius: '10px', cursor: 'pointer',
-                                        backgroundColor: event.checkedIn ? 'lightgreen' : 'inherit'
+                                        backgroundColor:
+                                            event.checkedIn ? 'lightgreen' : 'inherit',
+                                        marginBottom: '10px',
+                                        borderRadius: '10px',
+                                        cursor: 'pointer',
                                     }}
                                 >
                                     <ListItemText
@@ -132,7 +113,6 @@ export default function EventMap() {
                     </Paper>
                 </Grid>
 
-                {/* Right section: Map */}
                 <Grid item xs={12} md={8}>
                     <Paper elevation={3} style={{padding: '20px', height: '100%', overflow: 'hidden'}}>
                         <Typography variant="h4" gutterBottom style={{textAlign: 'center'}}>
@@ -186,8 +166,13 @@ export default function EventMap() {
                 </Grid>
             </Grid>
 
-            <EventDetails open={open} onClose={handleClose} selectedEvent={selectedEvent}
-                          handleConfirm={handleConfirm}/>
+            <EventDetails
+                open={open}
+                onClose={handleClose}
+                selectedEvent={selectedEvent}
+                handleConfirm={handleConfirm}
+                handleCancel={handleCancel}
+            />
         </div>
     );
 }
